@@ -30,6 +30,7 @@ public class QuestionRouter {
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(listUseCase.get(), QuestionDTO.class))
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
 
