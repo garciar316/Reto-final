@@ -1,6 +1,7 @@
 package co.com.sofka.questions.usecases.questions;
 
 import co.com.sofka.questions.collections.Question;
+import co.com.sofka.questions.mappers.QuestionMapper;
 import co.com.sofka.questions.model.QuestionDTO;
 import co.com.sofka.questions.repositories.QuestionRepository;
 import co.com.sofka.questions.usecases.MapperUtils;
@@ -15,18 +16,18 @@ import java.util.Objects;
 @Validated
 public class UpdateUseCase implements SaveQuestion {
     private final QuestionRepository questionRepository;
-    private final MapperUtils mapperUtils;
+    private final QuestionMapper questionMapper;
 
-    public UpdateUseCase(MapperUtils mapperUtils, QuestionRepository questionRepository) {
+    public UpdateUseCase(QuestionMapper questionMapper, QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
-        this.mapperUtils = mapperUtils;
+        this.questionMapper = questionMapper;
     }
 
     @Override
     public Mono<String> apply(QuestionDTO dto) {
         Objects.requireNonNull(dto.getId(), "Id of the question is required");
         return questionRepository
-                .save(mapperUtils.mapperToQuestion(dto.getId()).apply(dto))
+                .save(questionMapper.questionDTOToQuestion(dto.getId()).apply(dto))
                 .map(Question::getId);
     }
 

@@ -13,7 +13,6 @@ import reactor.core.publisher.Mono;
 @Validated
 public class CreateUseCase implements SaveQuestion {
     private final QuestionRepository questionRepository;
-
     private final QuestionMapper questionMapper;
 
     public CreateUseCase( QuestionRepository questionRepository, QuestionMapper questionMapper) {
