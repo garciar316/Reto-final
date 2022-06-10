@@ -8,7 +8,7 @@ import java.util.Optional;
 public class AnswerDTO {
 
     private String id;
-    @NotBlank(message = "The userid must exist for this object")
+    @NotBlank
     private String userId;
     @NotBlank
     private String questionId;

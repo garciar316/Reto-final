@@ -13,5 +13,5 @@ public interface AnswerRepository extends ReactiveCrudRepository<Answer, String>
 
     Mono<Void> deleteByQuestionId(String questionId);
 
-    Mono<Void> deleteByAnswerId(String answerId);
+    Mono<Void> deleteById(String answerId);
 }

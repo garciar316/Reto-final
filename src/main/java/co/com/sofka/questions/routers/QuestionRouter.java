@@ -2,12 +2,14 @@ package co.com.sofka.questions.routers;
 
 import co.com.sofka.questions.model.AnswerDTO;
 import co.com.sofka.questions.model.QuestionDTO;
+import co.com.sofka.questions.model.UserDTO;
 import co.com.sofka.questions.usecases.*;
 import co.com.sofka.questions.usecases.answer.AddAnswerUseCase;
-import co.com.sofka.questions.usecases.questions.CreateUseCase;
-import co.com.sofka.questions.usecases.questions.DeleteUseCase;
-import co.com.sofka.questions.usecases.questions.GetUseCase;
-import co.com.sofka.questions.usecases.questions.ListUseCase;
+import co.com.sofka.questions.usecases.answer.DeleteAnswerUseCase;
+import co.com.sofka.questions.usecases.questions.*;
+import co.com.sofka.questions.usecases.user.CreateUserUseCase;
+import co.com.sofka.questions.usecases.user.FindUserByIdUseCase;
+import co.com.sofka.questions.usecases.user.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -44,6 +46,7 @@ public class QuestionRouter {
                                 ownerListUseCase.apply(request.pathVariable("userId")),
                                 QuestionDTO.class
                          ))
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
 
@@ -52,11 +55,13 @@ public class QuestionRouter {
         Function<QuestionDTO, Mono<ServerResponse>> executor = questionDTO ->  createUseCase.apply(questionDTO)
                 .flatMap(result -> ServerResponse.ok()
                         .contentType(MediaType.TEXT_PLAIN)
-                        .bodyValue(result));
+                        .bodyValue(result))
+                .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class));
 
         return route(
                 POST("/create").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(QuestionDTO.class).flatMap(executor)
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
 
@@ -70,6 +75,7 @@ public class QuestionRouter {
                                 request.pathVariable("id")),
                                 QuestionDTO.class
                         ))
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
 
@@ -81,7 +87,7 @@ public class QuestionRouter {
                                 .flatMap(result -> ServerResponse.ok()
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))
-                        )
+                        ).onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
 
@@ -92,6 +98,68 @@ public class QuestionRouter {
                 request -> ServerResponse.accepted()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(deleteUseCase.apply(request.pathVariable("id")), Void.class))
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteAnswer(DeleteAnswerUseCase deleteAnswerUseCase) {
+        return route(
+                DELETE("/deleteAnswer/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.accepted()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(deleteAnswerUseCase.apply(request.pathVariable("id")), Void.class))
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> update(UpdateUseCase updateUseCase) {
+        Function<QuestionDTO, Mono<ServerResponse>> executor = questionDTO ->  updateUseCase.apply(questionDTO)
+                .flatMap(result -> ServerResponse.ok()
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .bodyValue(result));
+
+        return route(
+                PUT("/update").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(QuestionDTO.class).flatMap(executor)
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> createUser(CreateUserUseCase createUserUseCase){
+        return route(POST("/createUser").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(UserDTO.class)
+                        .flatMap(userDto -> createUserUseCase.apply(userDto)
+                                .flatMap(result -> ServerResponse.ok()
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(result))
+                        ).onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> updateUser(UpdateUserUseCase updateUserUseCase){
+        return route(POST("/updateUser").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(UserDTO.class)
+                        .flatMap(userDto -> updateUserUseCase.apply(userDto)
+                                .flatMap(result -> ServerResponse.ok()
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(result))
+                        ).onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> findUser(FindUserByIdUseCase findUserByIdUseCase) {
+        return route(
+                GET("/user/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(findUserByIdUseCase.findUserById(request.pathVariable("id")), UserDTO.class))
+                        .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
+        );
+    }
+
 }

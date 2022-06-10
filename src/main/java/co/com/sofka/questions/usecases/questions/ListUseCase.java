@@ -3,7 +3,6 @@ package co.com.sofka.questions.usecases.questions;
 import co.com.sofka.questions.mappers.QuestionMapper;
 import co.com.sofka.questions.model.QuestionDTO;
 import co.com.sofka.questions.repositories.QuestionRepository;
-import co.com.sofka.questions.usecases.MapperUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;

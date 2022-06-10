@@ -7,6 +7,7 @@ import co.com.sofka.questions.repositories.AnswerRepository;
 import co.com.sofka.questions.services.SendEmailService;
 import co.com.sofka.questions.usecases.questions.GetUseCase;
 import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -17,13 +18,20 @@ import java.util.Objects;
 @Service
 @Validated
 public class AddAnswerUseCase implements SaveAnswer, SendEmailService {
+
     private final AnswerRepository answerRepository;
+
     private final AnswerMapper answerMapper;
+
     private final GetUseCase getUseCase;
 
     private final JavaMailSender javaMailSender;
 
-    public AddAnswerUseCase(AnswerMapper answerMapper, GetUseCase getUseCase, AnswerRepository answerRepository, JavaMailSender javaMailSender) {
+    public AddAnswerUseCase(AnswerRepository answerRepository,
+                            AnswerMapper answerMapper,
+                            GetUseCase getUseCase,
+                            JavaMailSender javaMailSender) {
+
         this.answerRepository = answerRepository;
         this.getUseCase = getUseCase;
         this.answerMapper = answerMapper;
