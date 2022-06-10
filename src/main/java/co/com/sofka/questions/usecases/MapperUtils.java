@@ -41,15 +41,18 @@ public class MapperUtils {
                 entity.getUserId(),
                 entity.getQuestion(),
                 entity.getType(),
-                entity.getCategory()
+                entity.getCategory(),
+                entity.getUserEmail()
         );
     }
 
     public Function<Answer, AnswerDTO> mapEntityToAnswer() {
         return entity -> new AnswerDTO(
                 entity.getId(),
+                entity.getId(),
                 entity.getUserId(),
-                entity.getAnswer()
+                entity.getAnswer(),
+                entity.getPosition()
         );
     }
 }
