@@ -1,8 +1,10 @@
-package co.com.sofka.questions.usecases;
+package co.com.sofka.questions.usecases.questions;
 
+import co.com.sofka.questions.mappers.AnswerMapper;
+import co.com.sofka.questions.mappers.QuestionMapper;
 import co.com.sofka.questions.model.QuestionDTO;
-import co.com.sofka.questions.reposioties.AnswerRepository;
-import co.com.sofka.questions.reposioties.QuestionRepository;
+import co.com.sofka.questions.repositories.AnswerRepository;
+import co.com.sofka.questions.repositories.QuestionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
@@ -15,19 +17,23 @@ import java.util.function.Function;
 public class GetUseCase implements Function<String, Mono<QuestionDTO>> {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    private final MapperUtils mapperUtils;
+    private final QuestionMapper questionMapper;
+    private final AnswerMapper answerMapper;
 
-    public GetUseCase(MapperUtils mapperUtils, QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    public GetUseCase(QuestionRepository questionRepository,
+                      AnswerRepository answerRepository, QuestionMapper questionMapper,
+                      AnswerMapper answerMapper) {
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
-        this.mapperUtils = mapperUtils;
+        this.questionMapper = questionMapper;
+        this.answerMapper = answerMapper;
     }
 
     @Override
     public Mono<QuestionDTO> apply(String id) {
         Objects.requireNonNull(id, "Id is required");
         return questionRepository.findById(id)
-                .map(mapperUtils.mapEntityToQuestion())
+                .map(questionMapper.questionToQuestionDTO())
                 .flatMap(mapQuestionAggregate());
     }
 
@@ -35,7 +41,7 @@ public class GetUseCase implements Function<String, Mono<QuestionDTO>> {
         return questionDTO ->
                 Mono.just(questionDTO).zipWith(
                         answerRepository.findAllByQuestionId(questionDTO.getId())
-                                .map(mapperUtils.mapEntityToAnswer())
+                                .map(answerMapper.answerToAnswerDTO())
                                 .collectList(),
                         (question, answers) -> {
                             question.setAnswers(answers);

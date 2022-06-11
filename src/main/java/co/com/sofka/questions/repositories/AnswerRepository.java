@@ -1,4 +1,4 @@
-package co.com.sofka.questions.reposioties;
+package co.com.sofka.questions.repositories;
 
 import co.com.sofka.questions.collections.Answer;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -13,4 +13,6 @@ public interface AnswerRepository extends ReactiveMongoRepository<Answer, String
     Flux<Answer> findAllByQuestionId(String id);
 
     Mono<Void> deleteByQuestionId(String questionId);
+
+    Mono<Void> deleteById(String answerId);
 }

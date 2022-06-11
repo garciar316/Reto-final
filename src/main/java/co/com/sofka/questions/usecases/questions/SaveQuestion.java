@@ -1,4 +1,4 @@
-package co.com.sofka.questions.usecases;
+package co.com.sofka.questions.usecases.questions;
 
 import co.com.sofka.questions.model.QuestionDTO;
 import reactor.core.publisher.Mono;
