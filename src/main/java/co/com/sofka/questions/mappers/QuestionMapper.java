@@ -17,7 +17,6 @@ public class QuestionMapper {
             question.setCategory(updateQuestion.getCategory());
             question.setQuestion(updateQuestion.getQuestion());
             question.setType(updateQuestion.getType());
-            question.setUserEmail(updateQuestion.getUserEmail());
             return question;
         };
     }
@@ -28,8 +27,7 @@ public class QuestionMapper {
                 entity.getUserId(),
                 entity.getQuestion(),
                 entity.getType(),
-                entity.getCategory(),
-                entity.getUserEmail()
+                entity.getCategory()
         );
     }
 

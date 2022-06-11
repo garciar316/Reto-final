@@ -32,7 +32,7 @@ class AddAnswerUseCaseTest {
 
         var questionDTO = new QuestionDTO(
                 "001", "XXXX", "¿Test OK?", "OPEN",
-                "TECHNOLOGY","ss.rodriguez00021@gmail");
+                "TECHNOLOGY");
         var answerDTO = new AnswerDTO("xxx", "1234", "001", "test ok",1);
 
         var answer = new Answer();

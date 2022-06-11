@@ -31,7 +31,7 @@ class UpdateUseCaseTest {
     @Test
     void updateTest(){
 
-        var resourceDT0 = new QuestionDTO("xxxx", "yyyy", "¿Test OK?", "OPEN", "TECHNOLOGY", "ss.rodriguez00021@gmai");
+        var resourceDT0 = new QuestionDTO("xxxx", "yyyy", "¿Test OK?", "OPEN", "TECHNOLOGY");
 
         var resource = new Question();
         resource.setId("xxxx");

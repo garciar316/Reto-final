@@ -28,7 +28,7 @@ class CreateUseCaseTest {
 
         var questionDto = new QuestionDTO(
                 "01", "XXXX", "¿Test OK?", "OPEN",
-                "TECHNOLOGY","ss.rodriguez00021@gmai");
+                "TECHNOLOGY");
 
         var question = new Question();
         question.setId("01");

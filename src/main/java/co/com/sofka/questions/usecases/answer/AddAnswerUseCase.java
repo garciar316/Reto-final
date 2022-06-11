@@ -60,7 +60,7 @@ public class AddAnswerUseCase implements SaveAnswer, SendEmailService {
                             question.getAnswers().add(answerDTO);
 
                             var response = sendEmail(
-                                    question.getUserEmail(),
+                                    question.getUserId(),
                                     "Informando de respuesta a pregunta",
                                     "EL cuerpo del Email" + question.getQuestion());
                             return question;
