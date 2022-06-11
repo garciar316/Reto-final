@@ -1,8 +1,9 @@
-package co.com.sofka.questions.usecases;
+package co.com.sofka.questions.usecases.questions;
 
 import co.com.sofka.questions.collections.Question;
+import co.com.sofka.questions.mappers.QuestionMapper;
 import co.com.sofka.questions.model.QuestionDTO;
-import co.com.sofka.questions.reposioties.QuestionRepository;
+import co.com.sofka.questions.repositories.QuestionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
@@ -11,17 +12,17 @@ import reactor.core.publisher.Mono;
 @Validated
 public class CreateUseCase implements SaveQuestion {
     private final QuestionRepository questionRepository;
-    private final MapperUtils mapperUtils;
+    private final QuestionMapper questionMapper;
 
-    public CreateUseCase(MapperUtils mapperUtils, QuestionRepository questionRepository) {
+    public CreateUseCase( QuestionRepository questionRepository, QuestionMapper questionMapper) {
         this.questionRepository = questionRepository;
-        this.mapperUtils = mapperUtils;
+        this.questionMapper = questionMapper;
     }
 
     @Override
-    public Mono<String> apply(QuestionDTO newQuestion) {
+    public Mono<String> apply(QuestionDTO questionDTO) {
         return questionRepository
-                .save(mapperUtils.mapperToQuestion(null).apply(newQuestion))
+                .save(questionMapper.questionDTOToQuestion(null).apply(questionDTO))
                 .map(Question::getId);
     }
 

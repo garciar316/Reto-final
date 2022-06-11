@@ -1,7 +1,9 @@
 package co.com.sofka.questions.usecases;
 
 import co.com.sofka.questions.collections.Question;
-import co.com.sofka.questions.reposioties.QuestionRepository;
+import co.com.sofka.questions.mappers.QuestionMapper;
+import co.com.sofka.questions.repositories.QuestionRepository;
+import co.com.sofka.questions.usecases.questions.ListUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,9 +21,9 @@ class ListUseCaseTest {
 
     @BeforeEach
     public void setup(){
-        MapperUtils mapperUtils = new MapperUtils();
+        QuestionMapper questionMapper = new QuestionMapper();
         repository = mock(QuestionRepository.class);
-        listUseCase = new ListUseCase(mapperUtils, repository);
+        listUseCase = new ListUseCase(questionMapper, repository);
     }
 
     @Test

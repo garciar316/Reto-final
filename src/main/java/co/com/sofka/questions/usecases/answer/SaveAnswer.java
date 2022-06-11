@@ -1,4 +1,4 @@
-package co.com.sofka.questions.usecases;
+package co.com.sofka.questions.usecases.answer;
 
 import co.com.sofka.questions.model.AnswerDTO;
 import co.com.sofka.questions.model.QuestionDTO;
@@ -8,5 +8,6 @@ import javax.validation.Valid;
 
 @FunctionalInterface
 public interface SaveAnswer {
+
     Mono<QuestionDTO> apply(@Valid AnswerDTO answerDTO);
 }
