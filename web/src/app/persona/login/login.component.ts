@@ -114,18 +114,22 @@ export class LoginComponent implements OnInit {
     this.displayModal = true;
   }
 
-  recuperarEmail() {
+  async recuperarEmail() {
     try {
       this.mostrar2 = !this.mostrar2;
-      this.authService.resetPassword(this.form2.value.email).then((res) => {
-        this.displayModal = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: '!Exitoso¡',
-          detail: 'Revisa tu bandeja de entrada',
+      await this.authService
+        .resetPassword(this.form2.value.email)
+        .then(() => {
+          this.displayModal = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: '!Exitoso¡',
+            detail: 'Revisa tu bandeja de entrada',
+          });
         });
-      });
       this.mostrar2 = !this.mostrar2;
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

@@ -6,6 +6,7 @@
     <div class="card text-center">
         <div class="card-header">
             <strong>LOGIN</strong> <em class="pi pi-user" style="font-size: 1rem;margin-left: 10px;"></em>
+
             <p-progressSpinner *ngIf="mostrar" [style]="{width: '20', height: '20px'}" styleClass="custom-spinner"
                 strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
         </div>
@@ -37,9 +38,6 @@
     <button type="button" (click)="preguntasHome()" pButton pRipple label="Preguntas" class="p-button-danger mb-2"><em
             class="pi pi-user-edit" style="margin-top: 5px;"></em></button>
 </div>
-
-
-
 <p-dialog header="Recuperar Contraseña" [(visible)]="displayModal" [modal]="true" [style]="{width: '20vw'}"
     [draggable]="false" [resizable]="false">
     <p-progressSpinner *ngIf="mostrar2" [style]="{width: '20', height: '20px'}" styleClass="custom-spinner"
@@ -48,16 +46,13 @@
     <form [formGroup]="form2">
         <div class="col-12 md:col-4">
             <div class="p-inputgroup">
-                <span class="p-inputgroup-addon"><i class="pi pi-envelope"></i></span>
+                <span class="p-inputgroup-addon"><em class="pi pi-envelope"></em></span>
                 <input formControlName="email" type="text" pInputText placeholder="Ejemplo01@gmail.com">
             </div>
         </div>
         <div class="centrar">
             <button [disabled]="form2.invalid" (click)="recuperarEmail()" pButton pRipple type="button" label="Enviar"
                 class="p-button-outlined p-button-secondary" style="margin-top: 30px;"></button>
-
         </div>
     </form>
-
-
 </p-dialog>
