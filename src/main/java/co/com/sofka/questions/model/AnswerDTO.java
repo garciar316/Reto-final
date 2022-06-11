@@ -22,8 +22,8 @@ public class AnswerDTO {
 
     }
 
-    public AnswerDTO(String questionId,String userId,
-                     String answer, String id, Integer position) {
+    public AnswerDTO(String id, String userId , String questionId,
+                     String answer,  Integer position) {
         this.id = id;
         this.userId = userId;
         this.questionId = questionId;
