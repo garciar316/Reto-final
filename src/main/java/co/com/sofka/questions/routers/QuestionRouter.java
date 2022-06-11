@@ -6,6 +6,7 @@ import co.com.sofka.questions.model.UserDTO;
 import co.com.sofka.questions.usecases.*;
 import co.com.sofka.questions.usecases.answer.AddAnswerUseCase;
 import co.com.sofka.questions.usecases.answer.DeleteAnswerUseCase;
+import co.com.sofka.questions.usecases.answer.UpdateAnswerUseCase;
 import co.com.sofka.questions.usecases.questions.*;
 import co.com.sofka.questions.usecases.user.CreateUserUseCase;
 import co.com.sofka.questions.usecases.user.FindUserByIdUseCase;
@@ -174,22 +175,44 @@ public class QuestionRouter {
     @Bean
     @RouterOperation(path = "/update"
             , produces = {
-            MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.PUT, beanClass = UpdateUserUseCase.class, beanMethod = "apply",
+            MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.PUT, beanClass = UpdateUseCase.class, beanMethod = "apply",
             operation = @Operation(operationId = "apply", responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
                     @ApiResponse(responseCode = "500", description = "Bad Request")},
                     requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = QuestionDTO.class))))
+
     )
     public RouterFunction<ServerResponse> update(UpdateUseCase updateUseCase) {
         Function<QuestionDTO, Mono<ServerResponse>> executor = questionDTO ->  updateUseCase.apply(questionDTO)
                 .flatMap(result -> ServerResponse.ok()
                         .contentType(MediaType.TEXT_PLAIN)
-                        .bodyValue(result));
+                        .bodyValue(result))
+                .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class));
 
         return route(
                 PUT("/update").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(QuestionDTO.class).flatMap(executor)
                         .onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
+        );
+    }
+
+    @Bean
+    @RouterOperation(path = "/updateAnswer"
+            , produces = {
+            MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.PUT, beanClass = UpdateAnswerUseCase.class, beanMethod = "apply",
+            operation = @Operation(operationId = "apply", responses = {
+                    @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = QuestionDTO.class))),
+                    @ApiResponse(responseCode = "500", description = "Bad Request")},
+                    requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = AnswerDTO.class))))
+    )
+    public RouterFunction<ServerResponse> updateAnswer(UpdateAnswerUseCase updateAnswerUserCase) {
+        return route(PUT("/updateAnswer").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(AnswerDTO.class)
+                        .flatMap(answerDTO -> updateAnswerUserCase.apply(answerDTO)
+                                .flatMap(result -> ServerResponse.ok()
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(result))
+                        ).onErrorResume(throwable -> ServerResponse.badRequest().body(throwable.getMessage(), String.class))
         );
     }
 
