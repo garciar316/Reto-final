@@ -11,6 +11,11 @@ import {ToastModule} from 'primeng/toast';
 import {MenuModule} from 'primeng/menu';
 import {DividerModule} from 'primeng/divider';
 import {DialogModule} from 'primeng/dialog';
+import { PaginatorModule } from "primeng/paginator";
+import { DataViewModule } from "primeng/dataview";
+import {PanelModule} from 'primeng/panel';
+import {DropdownModule} from 'primeng/dropdown';
+import {RippleModule} from 'primeng/ripple';
 
 
 
@@ -29,9 +34,12 @@ import {DialogModule} from 'primeng/dialog';
     ToastModule,
     MenuModule,
     DividerModule,
-    DialogModule
-    
-    
+    DialogModule,
+    PaginatorModule,
+    DataViewModule,
+    PanelModule,
+    DropdownModule,
+    RippleModule
   ]
 })
 export class PrimeNGModule { }
