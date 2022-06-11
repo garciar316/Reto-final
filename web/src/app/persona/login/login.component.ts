@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.mostrar = !this.mostrar;
     this.authService
       .login(this.form.value.email, this.form.value.password)
-      .then((res) => {       
+      .then((res) => {
         if (res == undefined) {
           this.messageService.add({
             severity: 'error',
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
       });
   }
   ingresarGoogle() {
-    this.mostrar = !this.mostrar;       
+    this.mostrar = !this.mostrar;
     this.authService
       .loginGoogle(this.form.value.email, this.form.value.password)
       .then((res) => {
@@ -72,23 +72,20 @@ export class LoginComponent implements OnInit {
           setTimeout(() => {
             this.route.navigate(['preguntas']);
           }, 3000);
-
         } else {
           this.messageService.add({
             severity: 'error',
             summary: 'Rectifique los datos',
             detail: 'Clave o Usuario incorrecto, Intente de Nuevo',
           });
-          
         }
         this.mostrar = !this.mostrar;
       });
   }
   getUserLogged() {
-    this.authService.getUserLogged().subscribe((res) => {     
-    });
+    this.authService.getUserLogged().subscribe((res) => {});
   }
- 
+
   preguntasHome() {
     this.route.navigate(['preguntas']);
   }
@@ -117,18 +114,22 @@ export class LoginComponent implements OnInit {
     this.displayModal = true;
   }
 
-  recuperarEmail() {
+  async recuperarEmail() {
     try {
       this.mostrar2 = !this.mostrar2;
-      this.authService.resetPassword(this.form2.value.email).then((res) => {
-        this.displayModal = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: '!Exitoso¡',
-          detail: 'Revisa tu bandeja de entrada',
+      await this.authService
+        .resetPassword(this.form2.value.email)
+        .then(() => {
+          this.displayModal = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: '!Exitoso¡',
+            detail: 'Revisa tu bandeja de entrada',
+          });
         });
-      });
       this.mostrar2 = !this.mostrar2;
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
