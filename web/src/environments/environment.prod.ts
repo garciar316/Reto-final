@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   baseUrl: 'https://questions-back-final.herokuapp.com/',
+  emailSenderUrl: 'https://server-email-sender.herokuapp.com/',
   firebaseConfig : {
     apiKey: "AIzaSyDsTXFWsYXkIOhObah8IFuS7XSpKfVVS1Y",
     authDomain: "reto-final-a24b6.firebaseapp.com",

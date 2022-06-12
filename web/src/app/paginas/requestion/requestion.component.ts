@@ -12,10 +12,12 @@ import { ServiceService } from 'src/app/Service/service.service';
   styleUrls: ['./requestion.component.css'],
 })
 export class RequestionComponent implements OnInit {
+  userLogged = this.authService.getUserLogged();
   question: QuestionI | undefined;
   answers: AnswerI[] | undefined;
   answersNew: AnswerI[] = [];
   currentAnswer: number = 0;
+  uid: any;
 
   questions: QuestionI[] | undefined;
 
@@ -36,6 +38,9 @@ export class RequestionComponent implements OnInit {
   }
 
   getQuestions(id: string): void {
+    this.userLogged.subscribe((value) => {
+      this.uid = value?.email;
+    });
     this.questionService.getQuestion(id).subscribe((data) => {
       this.question = data;
       this.answers = data.answers?.sort((x: AnswerI, y: AnswerI) => {

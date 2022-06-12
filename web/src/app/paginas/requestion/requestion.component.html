@@ -44,7 +44,7 @@
             <div class="accordion-body">
               <strong>Por: {{answer.userId}}</strong>
             </div>
-            <div *ngIf="answer.userId == authService.userData.email">
+            <div *ngIf="answer.userId == uid">
               <app-edit-answer [answerData]="answer"></app-edit-answer>
             </div>
           </div>

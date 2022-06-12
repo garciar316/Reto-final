@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ServiceService } from 'src/app/Service/service.service';
 import { AnswerService } from 'src/app/Service/answer.service';
+import { EmailService } from 'src/app/Service/email.service';
+import { EmailI } from 'src/app/models/email-i';
 
 @Component({
   selector: 'app-answer',
@@ -30,6 +32,7 @@ export class AnswerComponent implements OnInit {
     private route: Router,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
+    private emailService: EmailService,
     public authService: ServiceService
   ) {}
 
@@ -51,6 +54,7 @@ export class AnswerComponent implements OnInit {
     this.authService.getUserLogged().subscribe({
       next: (value) => {
         this.answer.userId = value?.email ? value.email : '';
+        this.sendEmail(this.item.userId, this.item.id);
         this.answerService.saveAnswer(this.answer).subscribe({
           next: (v) => {
             if (v) {
@@ -74,6 +78,21 @@ export class AnswerComponent implements OnInit {
         });
       },
       error: (error) => console.log(error),
+    });
+  }
+
+  sendEmail(userId: string, questionId: string) {
+    let email: EmailI = {
+      toEmail: userId,
+      subject: 'Alguien ha contestado a tu pregunta',
+      body: `Para ver la respuesta click aquí: https://reto-final-a24b6.web.app/question/${questionId}`
+    };
+    this.emailService.sendEmail(email).subscribe({
+      next: value => {
+        console.log(value);
+        console.log(email);
+      },
+      error: error => console.log(error)
     });
   }
 }
