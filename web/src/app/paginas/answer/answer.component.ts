@@ -88,10 +88,7 @@ export class AnswerComponent implements OnInit {
       body: `Para ver la respuesta click aquí: https://reto-final-a24b6.web.app/question/${questionId}`
     };
     this.emailService.sendEmail(email).subscribe({
-      next: value => {
-        console.log(value);
-        console.log(email);
-      },
+      next: value => {},
       error: error => console.log(error)
     });
   }
