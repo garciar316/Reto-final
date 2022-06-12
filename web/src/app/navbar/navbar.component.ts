@@ -10,7 +10,6 @@ import { ServiceService } from '../Service/service.service';
 export class NavbarComponent implements OnInit {
   userLogged = this.authService.getUserLogged();
   disabled: boolean = false;
-
   constructor(private authService: ServiceService, private route: Router) {}
 
   ngOnInit(): void {
@@ -18,11 +17,11 @@ export class NavbarComponent implements OnInit {
   }
 
   traerdatos() {
-    this.userLogged.subscribe((value) => {    
-      if (value?.email == undefined) {
-        this.disabled = true;        
+    this.userLogged.subscribe((value) => {
+      if (value) {
+        this.disabled = true;
       } else {
-        this.disabled = false;       
+        this.disabled = false;
       }
     });
   }
@@ -31,5 +30,8 @@ export class NavbarComponent implements OnInit {
     this.route.navigate(['login']);
   }
 
-  
+  logout() {
+    this.authService.logout();
+    this.route.navigate(['login']);
+  }
 }
