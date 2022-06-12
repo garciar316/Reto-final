@@ -35,14 +35,6 @@ export class RequestionComponent implements OnInit {
     this.getQuestions(`${id}`);
   }
 
-  get2() {
-    let id = this.route.snapshot.paramMap.get('id');
-
-    this.answerService.getAnswer(id).subscribe((data) => {
-      this.answers = data.answers;
-    });
-  }
-
   getQuestions(id: string): void {
     this.questionService.getQuestion(id).subscribe((data) => {
       this.question = data;
