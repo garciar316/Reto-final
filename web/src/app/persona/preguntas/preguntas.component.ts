@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as e from 'express';
 import { QuestionI } from 'src/app/models/question-i';
 import { QuestionService } from 'src/app/Service/question.service';
 import { ServiceService } from 'src/app/Service/service.service';
@@ -12,12 +13,8 @@ export class PreguntasComponent implements OnInit {
   userLogged = this.authService.getUserLogged();
   uid: any;
 
-  totalQuestions: number = 0;
-
   questions: QuestionI[] | undefined;
   user: any = '';
-  page: number = 0;
-  pages: Array<number> | undefined;
   disabled: boolean = false;
 
   constructor(
@@ -31,49 +28,34 @@ export class PreguntasComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.userLogged.subscribe(value =>{
-        this.uid=value?.uid
+    this.userLogged.subscribe((value) => {
+      this.uid = value?.email;
     });
-    this.service.getPage(this.page).subscribe((data) => {
-        this.questions = data;
+    this.service.getAllQuestions().subscribe({
+      next: (value) => (this.questions = value),
+      error: (error) => console.error(error),
     });
-    this.service
-      .getTotalPages()
-      .subscribe((data) => (this.pages = new Array(data)));
-    this.service
-      .getCountQuestions()
-      .subscribe((data) => (this.totalQuestions = data));
-  }
-
-  isLast(): boolean {
-    let totalPeges: any = this.pages?.length;
-    return this.page == totalPeges - 1;
-  }
-
-  isFirst(): boolean {
-    return this.page == 0;
-  }
-
-  previousPage(): void {
-    !this.isFirst() ? (this.page--, this.getQuestions()) : false;
-  }
-
-  nextPage(): void {
-    !this.isLast() ? (this.page++, this.getQuestions()) : false;
-  }
-
-  getPage(page: number): void {
-    this.page = page;
-    this.getQuestions();
   }
 
   traerdatos() {
-    this.userLogged.subscribe((value) => {     
+    this.userLogged.subscribe((value) => {
       if (value?.email == undefined) {
-        this.disabled = true;       
+        this.disabled = true;
       } else {
-        this.disabled = false;     
+        this.disabled = false;
       }
     });
+  }
+
+  delete(id?: string): void {
+    if (id) {
+      this.service.deleteQuestion(id).subscribe({
+        next: (value) => console.log(value),
+        error: (error) => console.error(error),
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    }
   }
 }
