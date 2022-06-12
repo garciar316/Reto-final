@@ -1,7 +1,7 @@
 # Reto-final
 
-Backend desplegado en heroku: https://questions-back-final.herokuapp.com/
-Frontend desplegado en firebase hosting: https://reto-final-a24b6.web.app/preguntas
+- Backend desplegado en heroku: https://questions-back-final.herokuapp.com/
+- Frontend desplegado en firebase hosting: https://reto-final-a24b6.web.app/preguntas
 
 ## Puntos realizados:
 - Consumo del back-end actual: se consume tanto los endpoints iniciales, como los agregados
