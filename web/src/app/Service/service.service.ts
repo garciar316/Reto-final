@@ -13,6 +13,7 @@ import { User } from '../models/user';
   providedIn: 'root',
 })
 export class ServiceService {
+  userData: any;
   constructor(
     public afauth: AngularFireAuth,
     public store: AngularFirestore,
@@ -20,7 +21,9 @@ export class ServiceService {
   ) {
     this.afauth.authState.subscribe((user) => {
       if (user) {
+        this.userData = user;
         JSON.parse(localStorage.getItem('user')!);
+        localStorage.setItem('user', JSON.stringify(this.userData));
       } else {
         JSON.parse(localStorage.getItem('user')!);
         localStorage.setItem('user', 'null');
@@ -62,6 +65,22 @@ export class ServiceService {
 
   getUserLogged() {
     return this.afauth.authState;
+  }
+
+  SetUserData(user: any) {
+    const userRef: AngularFirestoreDocument<any> = this.store.doc(
+      `users/${user.uid}`
+    );
+    const userData: User = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+    };
+    return userRef.set(userData, {
+      merge: true,
+    });
   }
 
   logout() {

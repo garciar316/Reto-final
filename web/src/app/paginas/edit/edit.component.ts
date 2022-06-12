@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'primeng/api';
-import { answe } from 'src/app/models/answe';
 import { AnswerI } from 'src/app/models/answer-i';
 import { QuestionI } from 'src/app/models/question-i';
 import { QuestionService } from 'src/app/Service/question.service';
@@ -19,15 +18,13 @@ export class EditComponent implements OnInit {
   @Input() question2: QuestionI[] | undefined;
   userLogged = this.authService.getUserLogged();
   answers: AnswerI[] | undefined;
-  @Input() idanswer: any='';
-  question: answe = {
-    id:'',
-    userId:'',
+  @Input() questionData: any = '';
+  question: QuestionI = {
+    userId: '',
     question: '',
     type: '',
     category: '',
-    answers:[null],
-    start: '2'
+    start: '2',
   };
 
   constructor(
@@ -44,71 +41,64 @@ export class EditComponent implements OnInit {
     this.getDatos();
   }
 
-  getDatos(){
-    this.question=this.idanswer;
+  getDatos() {
+    this.question = this.questionData;
   }
-  
 
   openVerticallyCentered(content: any) {
     this.modalService.open(content, { centered: true });
   }
 
-  getData(){    
-    this.userLogged.subscribe(value=>{
-    })
-    
+  getData() {
+    this.userLogged.subscribe((value) => {});
   }
 
+  editQuestion(question: QuestionI): void {
+    question.id = this.questionData.id;
+    question.userId = this.questionData.userId;
 
-  editQuestion(question: QuestionI): void{
-     question.id=this.idanswer.id;
-    question.userId=this.idanswer.userId;
-
-    this.services.editQuestion(question).subscribe((v)=>{
-     
+    this.services.editQuestion(question).subscribe({
+      next: value => console.log(value),
+      error: error => console.error(error)
     });
 
     this.modalService.dismissAll();
     this.messageService.add({
       severity: 'success',
-      summary: 'Se ha actualizado la pregunta',          
-     });
+      summary: 'Se ha actualizado la pregunta',
+    });
     setTimeout(() => {
       window.location.reload();
     }, 2000);
   }
 
   saveQuestion(question: QuestionI): void {
-    if(question.type && question.category){    
-     this.modalService.dismissAll();
-     this.services.saveQuestion(question).subscribe({
-       next: (v) => {       
-         if (v) {
-           this.messageService.add({
-             severity: 'success',
-             summary: 'Se ha agregado la pregunta',
-             
+    if (question.type && question.category) {
+      this.modalService.dismissAll();
+      this.services.saveQuestion(question).subscribe({
+        next: (v) => {
+          if (v) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Se ha agregado la pregunta',
             });
             setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        } else {
-          
-        }
-      },
-      error: (e) =>
-      this.toastr.error(e.mesaje, 'Fail', {
-        timeOut: 3000,
-      }),
-      complete: () => console.info('complete'),
-    });
-  }else{
-   
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Rectifique los datos',
-      detail: '(Campos Vacios)-Intente de Nuevo',
-    });
-  }
+              window.location.reload();
+            }, 2000);
+          }
+        },
+        error: (e) =>
+          this.toastr.error(e.mesaje, 'Fail', {
+            timeOut: 3000,
+          }),
+        complete: () => console.info('complete'),
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Rectifique los datos',
+        detail: '(Campos Vacios)-Intente de Nuevo',
+      });
+    }
   }
 }
