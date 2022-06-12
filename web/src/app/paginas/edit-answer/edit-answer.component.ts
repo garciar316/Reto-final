@@ -9,19 +9,19 @@ import { ServiceService } from 'src/app/Service/service.service';
 import { AnswerService } from 'src/app/Service/answer.service';
 
 @Component({
-  selector: 'app-answer',
-  templateUrl: './answer.component.html',
-  styleUrls: ['./answer.component.css'],
+  selector: 'app-edit-answer',
+  templateUrl: './edit-answer.component.html',
+  styleUrls: ['./edit-answer.component.css'],
   providers: [MessageService],
 })
-export class AnswerComponent implements OnInit {
+export class EditAnswerComponent implements OnInit {
   public form: FormGroup = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(10)]],
     rating: ['', []],
   });
 
-  @Input() item: any;
+  @Input() answerData: any;
   userLogged = this.authService.getUserLogged();
   constructor(
     private modalService: NgbModal,
@@ -29,7 +29,7 @@ export class AnswerComponent implements OnInit {
     private toastr: ToastrService,
     private route: Router,
     private formBuilder: FormBuilder,
-    private messageService: MessageService,
+    public messageService: MessageService,
     public authService: ServiceService
   ) {}
 
@@ -40,14 +40,42 @@ export class AnswerComponent implements OnInit {
     position: 0,
   };
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getDatos();
+  }
 
   openVerticallyCentered(content: any) {
     this.modalService.open(content, { centered: true });
   }
 
+  getDatos() {
+    this.answer = this.answerData;
+  }
+
+  getData() {
+    this.userLogged.subscribe((value) => {});
+  }
+
+  editAnswer(answer: AnswerI): void {
+    answer.id = this.answerData.id;
+    answer.userId = this.answerData.userId;
+
+    this.answerService.updateAnswer(answer).subscribe({
+      next: (value) => console.log(value),
+      error: (error) => console.error(error),
+    });
+
+    this.modalService.dismissAll();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Se ha actualizado la pregunta',
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
+
   saveAnswer(): void {
-    this.answer.questionId = this.item.id;
     this.authService.getUserLogged().subscribe({
       next: (value) => {
         this.answer.userId = value?.email ? value.email : '';

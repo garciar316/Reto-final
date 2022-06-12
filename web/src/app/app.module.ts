@@ -19,6 +19,7 @@ import { QuestionComponent } from './paginas/question/question.component';
 import { ToastrModule } from 'ngx-toastr';
 import { RequestionComponent } from './paginas/requestion/requestion.component';
 import { EditComponent } from './paginas/edit/edit.component';
+import { EditAnswerComponent } from './paginas/edit-answer/edit-answer.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { EditComponent } from './paginas/edit/edit.component';
     QuestionComponent,
     RequestionComponent,
     EditComponent,
+    EditAnswerComponent,
   ],
   imports: [
     BrowserModule,
