@@ -29,4 +29,9 @@ export class AnswerService {
     return this.http.post<QuestionI>(direction, answer);
   }
 
+  updateAnswer(answer: AnswerI): Observable<AnswerI> {
+    let direction = `${this.url}updateAnswer`;
+    return this.http.put<AnswerI>(direction, answer);
+  }
+
 }
