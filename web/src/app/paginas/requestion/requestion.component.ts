@@ -33,7 +33,6 @@ export class RequestionComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.getQuestions(`${id}`);
-    this.get2();
   }
 
   get2() {
@@ -47,7 +46,15 @@ export class RequestionComponent implements OnInit {
   getQuestions(id: string): void {
     this.questionService.getQuestion(id).subscribe((data) => {
       this.question = data;
-      this.answers = data.answers;
+      this.answers = data.answers?.sort((x: AnswerI, y: AnswerI) => {
+        if (x.position < y.position) {
+          return -1;
+        }
+        if (x.position > y.position) {
+          return 1;
+        }
+        return 0;
+      });
     });
   }
 

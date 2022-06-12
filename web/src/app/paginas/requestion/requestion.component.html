@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="col-5">
-      <div class="accordion" id="accordionExample" *ngFor="let answer of answers">
+      <div class="accordion" id="accordionExample" *ngFor="let answer of answers?.reverse()">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
