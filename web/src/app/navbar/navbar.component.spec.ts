@@ -4,7 +4,7 @@ import { ServiceService } from '../Service/service.service';
 
 import { NavbarComponent } from './navbar.component';
 import firebase from 'firebase/compat';
-import {of} from 'rxjs'
+import {of} from 'rxjs';
 
 describe('NavbarComponent', () => {
 
