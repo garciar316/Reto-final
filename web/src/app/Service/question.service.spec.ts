@@ -4,13 +4,13 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 
-import { AnswerService } from './answer.service';
 import { AnswerI } from '../models/answer-i';
 import { QuestionI } from '../models/question-i';
 import { environment } from 'src/environments/environment';
+import { QuestionService } from './question.service';
 
-describe('AnswerService', () => {
-  let service: AnswerService;
+describe('QuestionService', () => {
+  let service: QuestionService;
   let httpMock: HttpTestingController;
   let answer: AnswerI;
   let question: QuestionI;
@@ -18,9 +18,9 @@ describe('AnswerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AnswerService],
+      providers: [QuestionService],
     });
-    service = TestBed.inject(AnswerService);
+    service = TestBed.inject(QuestionService);
     httpMock = TestBed.inject(HttpTestingController);
     answer = {
       id: '1234',
@@ -48,9 +48,9 @@ describe('AnswerService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('getAnswer return data', () => {
-    const id = '12345';
-    service.getAnswer(id).subscribe((res) => {
+  it('getQuestion should GET and return data', () => {
+    const id: string = '12345';
+    service.getQuestion(id).subscribe((res) => {
       expect(res).toEqual(question);
     });
 
@@ -60,22 +60,31 @@ describe('AnswerService', () => {
   });
 
   it('saveAnswer should POST and return data', () => {
-    service.saveAnswer(answer).subscribe((res) => {
+    service.saveQuestion(question).subscribe((res) => {
       expect(res).toEqual(question);
     });
 
-    const req = httpMock.expectOne(`${environment.baseUrl}add`);
+    const req = httpMock.expectOne(`${environment.baseUrl}create`);
     expect(req.request.method).toBe('POST');
+  });
+
+  it('editQuestion should put and return', () => {
+    service.editQuestion(question).subscribe((res) => {
+      expect(res).toEqual(question);
+    });
+
+    const req = httpMock.expectOne(`${environment.baseUrl}update`);
+    expect(req.request.method).toBe('PUT');
     req.flush(question);
   });
 
-  it('update should put and return', () => {
-    service.updateAnswer(answer).subscribe((res) => {
-      expect(res).toEqual(answer);
+it('deleteQuestion should DELETE and return void', () => {
+    const id: string = '12345';
+    service.deleteQuestion(id).subscribe((res) => {
+      expect(res).toEqual();
     });
 
-    const req = httpMock.expectOne(`${environment.baseUrl}updateAnswer`);
-    expect(req.request.method).toBe('PUT');
-    req.flush(answer);
+    const req = httpMock.expectOne(`${environment.baseUrl}delete/${id}`);
+    expect(req.request.method).toBe('DELETE');
   });
 });
